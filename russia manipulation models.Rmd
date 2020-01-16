@@ -1,0 +1,67 @@
+---
+title: "Russia manipulation Notebook"
+output: html_notebook
+---
+
+
+```{r setup}
+library(readxl)
+library(interplot)
+library(lme4)
+library(tidyverse)
+rus.data <- read_xlsx("russia full ts data.xlsx")
+```
+
+
+
+
+```{r}
+model.ur.voteshare <- lmer(ur.voteshare ~ pistar.ur + comp.scale03_18 + pct.russian.extrap + he.graduates.by1000pop + govemploy.by.pop +
+                             urban.pct + pensioners.per.1000 + income.1000rubles + presidential +
+                             pistar.ur*comp.scale03_18 +
+                             (1 | regionid), data=rus.data)
+summary(model.ur.voteshare)
+interplot(model.ur.voteshare, var1="pistar.ur", var2="comp.scale03_18")
+```
+
+
+```{r}
+model.ur.tc <- lmer(coefficient ~ comp.scale03_18  + he.graduates.by1000pop +                                                    govemploy.by.pop +
+                             urban.pct + pensioners.per.1000 + income.1000rubles + presidential +
+                             urgov.pct.updated*comp.scale03_18 +
+                             (1 | regionid), data=rus.data)
+summary(model.ur.tc)
+interplot(model.ur.tc, var1="urgov.pct.updated", var2="comp.scale03_18")
+```
+
+
+
+```{r}
+model.ur.ps <- lmer(pistar.ur ~ comp.scale03_18  + he.graduates.by1000pop +                                                    govemploy.by.pop +
+                             urban.pct + pensioners.per.1000 + income.1000rubles + presidential +
+                             urgov.pct.updated*comp.scale03_18 +
+                             (1 | regionid), data=rus.data)
+summary(model.ur.ps)
+interplot(model.ur.ps, var1="urgov.pct.updated", var2="comp.scale03_18")
+```
+
+
+```{r}
+model.ur.d <- lmer(delta.ur ~ comp.scale03_18  + he.graduates.by1000pop +                                                    govemploy.by.pop +
+                             urban.pct + pensioners.per.1000 + income.1000rubles + presidential +
+                             urgov.pct.updated*comp.scale03_18 +
+                             (1 | regionid), data=rus.data)
+summary(model.ur.d)
+interplot(model.ur.d, var1="urgov.pct.updated", var2="comp.scale03_18")
+```
+
+
+```{r}
+model.ur.f <- glmer(anyfraud ~ comp.scale03_18  + he.graduates.by1000pop +                                                    govemploy.by.pop +
+                             urban.pct + pensioners.per.1000 + income.1000rubles + presidential +
+                             urgov.pct.updated*comp.scale03_18 +
+                             (1 | regionid), data=rus.data, family=binomial(link="logit"))
+summary(model.ur.f)
+interplot(model.ur.f, var1="urgov.pct.updated", var2="comp.scale03_18")
+```
+
